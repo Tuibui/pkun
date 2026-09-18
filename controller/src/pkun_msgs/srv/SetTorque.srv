@@ -1,0 +1,9 @@
+# Enable or release servo output. Releasing stops the PWM pulse entirely, which
+# lets you pose the robot by hand and stops analog servos cooking themselves
+# while holding a loaded stance.
+
+bool enable
+string[] name         # empty = all joints
+---
+bool success
+string message

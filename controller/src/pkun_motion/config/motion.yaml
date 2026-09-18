@@ -1,0 +1,37 @@
+# Motion tuning. Link dimensions must stay in sync with class Params in
+# leg_kinematics.py -- that file is the source of truth for the geometry.
+
+/**:
+  ros__parameters:
+    link:
+      a: 77.27      # half hip spacing front-back, mm
+      b: 29.0       # half hip spacing left-right
+      c: 0.0        # body centre down to the abduction axis
+      h: 23.38      # abduction axis down to the hip pitch axis
+      d1: 12.75     # lateral offset to the hip pitch servo
+      d2: 12.75     # knee offset back toward the body
+      l1: 56.39     # thigh
+      l2: 56.58     # shank
+
+    stand_height: 110.0   # STAND_H in gestures.py
+    splay_deg: 12.0       # SPLAY
+    knee: 1               # KNEE branch selector
+    publish_rate_hz: 50.0 # must match the servo driver's update_rate_hz
+
+    gait:
+      cycle_time: 0.6     # seconds per full trot cycle
+      step_height: 18.0   # mm of foot lift during swing
+      duty: 0.5           # fraction of the cycle a foot is planted
+
+    idle:
+      breathe_amp: 2.0    # mm of body bob at rest
+      breathe_period: 4.0 # seconds
+
+    # Straight from JointLimits in sleep_wake.py. The knee folds one way only.
+    limits:
+      abduction_min_deg: -55.0
+      abduction_max_deg: 55.0
+      hip_pitch_min_deg: -90.0
+      hip_pitch_max_deg: 90.0
+      knee_min_deg: 0.0
+      knee_max_deg: 150.0

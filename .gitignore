@@ -1,0 +1,89 @@
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# virtualenv / conda
+.venv/
+venv/
+env/
+ENV/
+
+# เครื่องมือทดสอบ / ตรวจโค้ด
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---------------------------------------------------------------------------
+# ROS 2 / colcon  (controller/)
+# ---------------------------------------------------------------------------
+# สามโฟลเดอร์นี้ colcon build สร้างใหม่ได้เสมอ และใหญ่มาก ห้ามใส่ลง git
+build/
+install/
+log/
+.colcon_*
+COLCON_IGNORE
+
+# ---------------------------------------------------------------------------
+# Claude Code — settings.local.json เป็นของเครื่องใครเครื่องมัน
+# (ถ้าอยากแชร์ permission ให้ทีม ใช้ .claude/settings.json แทน ไฟล์นั้นไม่ถูก ignore)
+# ---------------------------------------------------------------------------
+.claude/settings.local.json
+**/.claude/settings.local.json
+
+# ---------------------------------------------------------------------------
+# Editor / OS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# ผลลัพธ์ที่สคริปต์สร้างเอง — รวมกันเกือบ 19 MB และสร้างใหม่ได้ทุกไฟล์
+# ---------------------------------------------------------------------------
+# ถ้าอยากเก็บไฟล์ไหนไว้ใน repo (เช่น เอาไปโชว์ใน README)
+# ให้ลบบรรทัดของไฟล์นั้นออก แล้ว git add -f <ไฟล์> หนึ่งครั้ง
+#
+# คำสั่งที่สร้างแต่ละไฟล์:
+#   out.png            python3 leg_kinematics.py --save out.png
+#   kinematic_ref.png  python3 servo_map.py --diagram kinematic_ref.png
+#   catalog.png        python3 show_gesture.py --sheet catalog.png
+#   walk.gif           python3 show_motion.py --gif walk.gif
+#   thinking.gif       python3 show_gesture.py --gesture thinking --gif thinking.gif
+#   gait_50hz.csv      python3 walking_gait.py --csv gait_50hz.csv
+#   motion_*.csv       python3 sleep_wake.py --csv-prefix motion
+#   notice_urgent.csv  python3 gestures.py --csv notice_urgent
+
+# รูปนิ่ง
+out.png
+catalog.png
+kinematic_ref.png
+
+# ภาพเคลื่อนไหว (ก้อนใหญ่สุด ~17 MB)
+*.gif
+
+# ไทม์ไลน์มุมเซอร์โว 50 Hz
+gait_50hz.csv
+motion_sleep.csv
+motion_wake.csv
+notice_urgent.csv
+
+# ถ้าจะ export ท่าอื่นเพิ่มเรื่อย ๆ แล้วไม่อยากมานั่งไล่เพิ่มทีละชื่อ
+# ให้เปิดบรรทัดล่างนี้แทน (ระวัง: จะกิน CSV ที่ทำมือด้วย)
+# *.csv
+
+# ---------------------------------------------------------------------------
+# ไฟล์ที่ "ไม่" ถูก ignore โดยตั้งใจ — กันเผลอ
+# ---------------------------------------------------------------------------
+!sddefault.jpg
+!prompt_for_claude_code.md

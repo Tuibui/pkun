@@ -1,0 +1,30 @@
+# Face rendering and sound cues.
+
+expression:
+  ros__parameters:
+    display:
+      backend: console      # "console" until the panel is wired, then "ssd1306"
+      i2c_bus: /dev/i2c-1
+      address: 0x3C         # 0x3D on some SSD1306 modules
+
+    update_rate_hz: 50.0    # matches the servo driver, drives head/ear/tail
+    render_rate_hz: 20.0    # the panel is slow; do not redraw at 50 Hz
+
+    blink:
+      period: 4.5           # average seconds between idle blinks
+      duration: 0.16        # BLINK dur in gestures.py
+
+    # Index -> name, must stay in the same order as LED_NAMES in gestures.py.
+    led_names: ["off", "rest", "low", "soon", "urgent", "good", "neutral",
+                "warn", "listen", "think", "warm", "power", "focus", "speak"]
+
+    sound:
+      command: aplay
+      args: ["-q"]
+      dir: ""               # absolute path to your wav folder
+      # Parallel arrays: gesture id -> file inside `dir`.
+      gesture_ids: []
+      gesture_files: []
+      # For example:
+      #   gesture_ids:   ["greet", "celebrate", "notice_urgent"]
+      #   gesture_files: ["greet.wav", "celebrate.wav", "alert.wav"]

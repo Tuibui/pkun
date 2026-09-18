@@ -1,0 +1,43 @@
+# Gamepad mapping. Defaults follow the Xbox layout that most Bluetooth pads
+# report; check yours with `ros2 topic echo /joy` before trusting these.
+#
+# Pairing is done once, outside ROS:
+#   bluetoothctl
+#   > scan on
+#   > pair    <MAC>
+#   > trust   <MAC>      # trust makes it reconnect on its own after a reboot
+#   > connect <MAC>
+# The kernel then exposes it as /dev/input/jsN and joy_linux publishes /joy.
+
+joy_teleop:
+  ros__parameters:
+    axis:
+      linear_x: 1       # left stick vertical  -> forward/back
+      linear_y: 0       # left stick horizontal -> strafe
+      angular_z: 3      # right stick horizontal -> turn
+      body_pitch: 4     # right stick vertical -> body pitch in posture mode
+
+    button:
+      deadman: 6        # hold to walk (left trigger/bumper on most pads)
+      posture_mode: 4   # hold to pose the body instead of walking
+
+    scale:
+      linear_x: 60.0    # mm/s at full stick
+      linear_y: 40.0
+      angular_z: 0.8    # rad/s
+      body_pitch: 0.26  # rad, about 15 deg
+
+    deadzone: 0.12      # cheap pads drift; below this the stick reads as zero
+    stand_height: 110.0
+    joy_timeout: 1.0    # seconds of silence before an automatic stop
+
+    # Face buttons -> gesture ids. Any id from pkun_msgs/Gesture works here.
+    gesture:
+      buttons: [0, 1, 2, 3]
+      ids: ["greet", "celebrate", "thinking", "settle"]
+
+joy_linux:
+  ros__parameters:
+    device_name: ""       # empty = first pad found
+    deadzone: 0.0         # do the deadzone once, in pkun_teleop
+    autorepeat_rate: 20.0 # keeps the deadman alive while a stick is held still

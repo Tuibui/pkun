@@ -1,0 +1,11 @@
+# Per-joint zero offset, applied by the driver on top of every command.
+# This is how you correct servo horn spline misalignment without recompiling.
+# Set persist=true to write the value back into the driver's parameter store
+# so `ros2 param dump` captures it for the YAML.
+
+string name           # joint name, empty = apply to all joints
+float64 trim          # radians, added to the commanded angle
+bool persist false
+---
+bool success
+string message

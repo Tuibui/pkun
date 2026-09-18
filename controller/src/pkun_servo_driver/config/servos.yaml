@@ -1,0 +1,69 @@
+# P-kun servo map: 12 leg DOF + 6 expression DOF = 18 servos on two PCA9685s.
+#
+# Joint limits come straight from JointLimits in sleep_wake.py:
+#   abduction -55..55, hip_pitch -90..90, knee 0..150 (folds one way only).
+#
+# center_us / us_per_deg / invert are per-horn calibration. Procedure:
+#   1. ros2 service call .../set_torque pkun_msgs/srv/SetTorque "{enable: false}"
+#   2. fit the horns as close to the zero pose as the spline allows
+#   3. enable torque, command 0 rad, and nudge trim_deg until the leg is straight
+#   4. flip `invert` if the joint moves the wrong way -- do NOT fix that with a
+#      negative us_per_deg, the limits are applied before the sign
+#
+# max_rate_dps is the 300 deg/s planning rate from walking_gait.py, not the
+# no-load spec. Analog servos overheat if you actually ask for 500 deg/s.
+
+/**:
+  ros__parameters:
+    i2c_bus: /dev/i2c-1
+    board_addresses: [0x40, 0x41]
+    update_rate_hz: 50.0      # analog servos only accept 50 Hz
+    state_rate_hz: 10.0
+
+    joints:
+      - fl_abduction
+      - fl_hip_pitch
+      - fl_knee
+      - fr_abduction
+      - fr_hip_pitch
+      - fr_knee
+      - rl_abduction
+      - rl_hip_pitch
+      - rl_knee
+      - rr_abduction
+      - rr_hip_pitch
+      - rr_knee
+      - head_pitch
+      - head_yaw
+      - head_roll
+      - ear_l
+      - ear_r
+      - tail
+
+    servos:
+      # ---- board 0 (0x40): legs -------------------------------------------
+      fl_abduction: {board: 0, channel: 0,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -55.0, max_deg: 55.0,  invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+      fl_hip_pitch: {board: 0, channel: 1,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -90.0, max_deg: 90.0,  invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+      fl_knee:      {board: 0, channel: 2,  center_us: 1500.0, us_per_deg: 11.111, min_deg: 0.0,   max_deg: 150.0, invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+
+      fr_abduction: {board: 0, channel: 3,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -55.0, max_deg: 55.0,  invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+      fr_hip_pitch: {board: 0, channel: 4,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -90.0, max_deg: 90.0,  invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+      fr_knee:      {board: 0, channel: 5,  center_us: 1500.0, us_per_deg: 11.111, min_deg: 0.0,   max_deg: 150.0, invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+
+      rl_abduction: {board: 0, channel: 6,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -55.0, max_deg: 55.0,  invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+      rl_hip_pitch: {board: 0, channel: 7,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -90.0, max_deg: 90.0,  invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+      rl_knee:      {board: 0, channel: 8,  center_us: 1500.0, us_per_deg: 11.111, min_deg: 0.0,   max_deg: 150.0, invert: false, trim_deg: 0.0, max_rate_dps: 300.0}
+
+      rr_abduction: {board: 0, channel: 9,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -55.0, max_deg: 55.0,  invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+      rr_hip_pitch: {board: 0, channel: 10, center_us: 1500.0, us_per_deg: 11.111, min_deg: -90.0, max_deg: 90.0,  invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+      rr_knee:      {board: 0, channel: 11, center_us: 1500.0, us_per_deg: 11.111, min_deg: 0.0,   max_deg: 150.0, invert: true,  trim_deg: 0.0, max_rate_dps: 300.0}
+
+      # ---- board 1 (0x41): head, ears, tail --------------------------------
+      # Slower rate caps here: the head carries the camera/speaker mass, and
+      # EXPR_HEAD in gestures.py rate-limits it to 240 deg/s for the same reason.
+      head_pitch:   {board: 1, channel: 0,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -30.0, max_deg: 30.0,  invert: false, trim_deg: 0.0, max_rate_dps: 240.0}
+      head_yaw:     {board: 1, channel: 1,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -60.0, max_deg: 60.0,  invert: false, trim_deg: 0.0, max_rate_dps: 240.0}
+      head_roll:    {board: 1, channel: 2,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -25.0, max_deg: 25.0,  invert: false, trim_deg: 0.0, max_rate_dps: 240.0}
+      ear_l:        {board: 1, channel: 3,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -45.0, max_deg: 45.0,  invert: false, trim_deg: 0.0, max_rate_dps: 240.0}
+      ear_r:        {board: 1, channel: 4,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -45.0, max_deg: 45.0,  invert: true,  trim_deg: 0.0, max_rate_dps: 240.0}
+      tail:         {board: 1, channel: 5,  center_us: 1500.0, us_per_deg: 11.111, min_deg: -45.0, max_deg: 45.0,  invert: false, trim_deg: 0.0, max_rate_dps: 500.0}

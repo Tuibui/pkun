@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>pkun_teleop</name>
+  <version>0.1.0</version>
+  <description>
+    Bluetooth gamepad teleop for P-kun: sensor_msgs/Joy in, cmd_vel / gesture /
+    body_pose out, with a deadman and a link-loss watchdog.
+  </description>
+  <maintainer email="metasitsodsup9615@gmail.com">Metasit Sodsup</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>pkun_msgs</depend>
+
+  <!-- Provides the joy_linux node that reads /dev/input/jsN. -->
+  <exec_depend>joy_linux</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
